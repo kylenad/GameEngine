@@ -127,8 +127,8 @@ CMAKE_OBJCOPY:FILEPATH=CMAKE_OBJCOPY-NOTFOUND
 //Path to a program.
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
-//Build architectures for OSX
-CMAKE_OSX_ARCHITECTURES:STRING=
+//Build for ARM architecture on Apple Silicon
+CMAKE_OSX_ARCHITECTURES:STRING=arm64
 
 //Minimum OS X version to target for deployment (at runtime); newer
 // APIs weak linked. Set to empty string for default value.
@@ -234,7 +234,7 @@ OPENGL_gl_LIBRARY:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.4.s
 OPENGL_glu_LIBRARY:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/OpenGL.framework
 
 //The directory containing a CMake configuration file for glfw3.
-glfw3_DIR:PATH=/opt/homebrew/lib/cmake/glfw3
+glfw3_DIR:PATH=/usr/local/lib/cmake/glfw3
 
 
 ########################

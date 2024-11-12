@@ -825,4 +825,4 @@ CMakeFiles/MyExecutable.dir/src/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstdarg \
   /Users/kylen/Desktop/Programs/GameEngine/include/glad/glad.h \
   /Users/kylen/Desktop/Programs/GameEngine/include/KHR/khrplatform.h \
-  /opt/homebrew/include/GLFW/glfw3.h
+  /usr/local/include/GLFW/glfw3.h

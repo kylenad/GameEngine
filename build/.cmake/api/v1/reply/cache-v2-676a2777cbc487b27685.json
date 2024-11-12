@@ -775,11 +775,11 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "Build architectures for OSX"
+					"value" : "Build for ARM architecture on Apple Silicon"
 				}
 			],
 			"type" : "STRING",
-			"value" : ""
+			"value" : "arm64"
 		},
 		{
 			"name" : "CMAKE_OSX_DEPLOYMENT_TARGET",
@@ -1283,7 +1283,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "/opt/homebrew/lib/cmake/glfw3"
+			"value" : "/usr/local/lib/cmake/glfw3"
 		}
 	],
 	"kind" : "cache",

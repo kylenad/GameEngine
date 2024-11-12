@@ -112,7 +112,7 @@ MyExecutable: CMakeFiles/MyExecutable.dir/src/main.cpp.o
 MyExecutable: CMakeFiles/MyExecutable.dir/src/glad.c.o
 MyExecutable: CMakeFiles/MyExecutable.dir/build.make
 MyExecutable: /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/OpenGL.framework
-MyExecutable: /opt/homebrew/lib/libglfw.3.4.dylib
+MyExecutable: /usr/local/lib/libglfw3.a
 MyExecutable: CMakeFiles/MyExecutable.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/kylen/Desktop/Programs/GameEngine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable MyExecutable"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MyExecutable.dir/link.txt --verbose=$(VERBOSE)

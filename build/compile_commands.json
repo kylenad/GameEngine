@@ -1,13 +1,13 @@
 [
 {
   "directory": "/Users/kylen/Desktop/Programs/GameEngine/build",
-  "command": "/usr/bin/clang++  -I/Users/kylen/Desktop/Programs/GameEngine/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -o CMakeFiles/MyExecutable.dir/src/main.cpp.o -c /Users/kylen/Desktop/Programs/GameEngine/src/main.cpp",
+  "command": "/usr/bin/clang++  -I/Users/kylen/Desktop/Programs/GameEngine/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/System/Library/Frameworks -isystem /usr/local/include -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -o CMakeFiles/MyExecutable.dir/src/main.cpp.o -c /Users/kylen/Desktop/Programs/GameEngine/src/main.cpp",
   "file": "/Users/kylen/Desktop/Programs/GameEngine/src/main.cpp",
   "output": "CMakeFiles/MyExecutable.dir/src/main.cpp.o"
 },
 {
   "directory": "/Users/kylen/Desktop/Programs/GameEngine/build",
-  "command": "/usr/bin/clang  -I/Users/kylen/Desktop/Programs/GameEngine/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -o CMakeFiles/MyExecutable.dir/src/glad.c.o -c /Users/kylen/Desktop/Programs/GameEngine/src/glad.c",
+  "command": "/usr/bin/clang  -I/Users/kylen/Desktop/Programs/GameEngine/include -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/System/Library/Frameworks -isystem /usr/local/include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -o CMakeFiles/MyExecutable.dir/src/glad.c.o -c /Users/kylen/Desktop/Programs/GameEngine/src/glad.c",
   "file": "/Users/kylen/Desktop/Programs/GameEngine/src/glad.c",
   "output": "CMakeFiles/MyExecutable.dir/src/glad.c.o"
 }

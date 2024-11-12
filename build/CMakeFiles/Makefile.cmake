@@ -11,10 +11,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.31.0/CMakeCCompiler.cmake"
   "CMakeFiles/3.31.0/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.31.0/CMakeSystem.cmake"
-  "/opt/homebrew/lib/cmake/glfw3/glfw3Config.cmake"
-  "/opt/homebrew/lib/cmake/glfw3/glfw3ConfigVersion.cmake"
-  "/opt/homebrew/lib/cmake/glfw3/glfw3Targets-release.cmake"
-  "/opt/homebrew/lib/cmake/glfw3/glfw3Targets.cmake"
   "/opt/homebrew/share/cmake/Modules/CMakeCInformation.cmake"
   "/opt/homebrew/share/cmake/Modules/CMakeCXXInformation.cmake"
   "/opt/homebrew/share/cmake/Modules/CMakeCommonLanguageInclude.cmake"
@@ -54,6 +50,10 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/homebrew/share/cmake/Modules/Platform/Linker/Apple-AppleClang-CXX.cmake"
   "/opt/homebrew/share/cmake/Modules/Platform/Linker/Apple-AppleClang.cmake"
   "/opt/homebrew/share/cmake/Modules/Platform/UnixPaths.cmake"
+  "/usr/local/lib/cmake/glfw3/glfw3Config.cmake"
+  "/usr/local/lib/cmake/glfw3/glfw3ConfigVersion.cmake"
+  "/usr/local/lib/cmake/glfw3/glfw3Targets-noconfig.cmake"
+  "/usr/local/lib/cmake/glfw3/glfw3Targets.cmake"
   )
 
 # The corresponding makefile is:
