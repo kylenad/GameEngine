@@ -1,4 +1,5 @@
 # Set the minimum required CMake version
+# Works with ARM architecture
 cmake_minimum_required(VERSION 3.10)
 project(GameEngine)
 set(CMAKE_CXX_STANDARD 17)
