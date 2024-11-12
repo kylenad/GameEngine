@@ -11,5 +11,11 @@ Game engine made in C++ supporting 2D graphics.
 
 ## Compile Instructions:
 Clone project and build using the CMake file. Run the generated executable file in the build folder.
+- NOTE: Current CMake build compatible with arm64 architecture; update for x64
+### MacOS
+- Install GLFW through homebrew
+```
+brew install glfw
+```
 
 
