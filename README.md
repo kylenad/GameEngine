@@ -1,5 +1,5 @@
 # GameEngine
-Game engine made in C++ supporting 2D graphics.
+Game engine made in C++ supporting 2D & 3D graphics.
 
 ## Currently Working On:
 - Graphics implementation
@@ -17,5 +17,8 @@ Clone project and build using the CMake file. Run the generated executable file 
 ```
 brew install glfw
 ```
+
+## Resources:
+- https://learnopengl.com/Introduction 
 
 
