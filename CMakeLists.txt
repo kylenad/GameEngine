@@ -5,12 +5,11 @@ project(GameEngine)
 set(CMAKE_CXX_STANDARD 17)
 add_executable(MyExecutable src/main.cpp src/glad.c)
 
-if(APPLE)
-    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
-        set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build for ARM architecture on Apple Silicon" FORCE)
-    elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-        set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build for x64 architecture on Intel Macs" FORCE)
-    endif()
+
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+    set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build for ARM architecture on Apple Silicon" FORCE)
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+    set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build for x64 architecture on Intel Macs" FORCE)
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
