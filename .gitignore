@@ -19,3 +19,5 @@ CMakeFiles/
 
 # Dependency libraries (if downloaded locally)
 libs/
+
+.DS_Store

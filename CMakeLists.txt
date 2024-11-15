@@ -17,7 +17,16 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 find_package(OpenGL REQUIRED)
-find_package(glfw3 3.3 REQUIRED)
+
+if(WIN32)
+    # Find GLFW on Windows (installed via vcpkg or manually)
+    find_package(glfw3 REQUIRED PATHS C:/path/to/vcpkg/installed/x64-windows/share/glfw3 NO_DEFAULT_PATH) #Update with your path for local build
+elseif(APPLE)
+    # Find GLFW on macOS (typically installed via Homebrew)
+    find_package(glfw3 3.3 REQUIRED)
+endif()
+
+
 
 target_include_directories(MyExecutable PRIVATE include)
 
