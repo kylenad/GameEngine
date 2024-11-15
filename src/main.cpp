@@ -9,19 +9,20 @@ void processInput(GLFWwindow *window);
 //Basic vertex shader definition using version 4.1
 const char *vertexShaderSource = "#version 410 core\n"
     "layout (location = 0) in vec3 aPos;\n"
-    "out vec4 vertexColor;\n"
+    "layout (location = 1) in vec3 aColor;\n"
+    "out vec3 rectColor;\n"
     "void main()\n"
     "{\n"
-    "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n" 
-    "vertexColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+    "gl_Position = vec4(aPos, 1.0);\n" 
+    "rectColor = aColor;\n"
     "}\0";
 
 //Fragment shader definition
 const char *fragmentShaderSource = "#version 410 core\n"
     "out vec4 FragColor;\n"
-    "in vec4 vertexColor;\n"
+    "in vec3 rectColor;\n"
     "void main() {\n"
-    "FragColor = vertexColor;\n"
+    "FragColor = vec4(rectColor, 1.0);\n"
     "}\0";
 const char *fragmentShaderSource2 = "#version 410 core\n"
     "out vec4 FragColor;\n"
@@ -122,10 +123,11 @@ int main () {
     glEnableVertexAttribArray(0);
 
     float verticies[] = {
-         0.5f,  0.5f, 0.0f,  // top right
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
+        // position          //color
+         0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // top right
+         0.0f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, // bottom right
+        -0.9f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f, // bottom left
+        -0.9f,  0.5f, 0.0f,  1.0f, 0.0, 1.0f,  // top left 
     };
     unsigned int indices[] = {  // note that we start from 0
     0, 1, 3,   // first triangle
@@ -133,9 +135,9 @@ int main () {
     };  
 
     float triangle[] {
-        0.0f, -0.5f, 0.0f,  // left
+        0.1f, -0.5f, 0.0f,  // left
         0.9f, -0.5f, 0.0f,  // right
-        0.45f, 0.5f, 0.0f   // top 
+        0.46f, 0.5f, 0.0f   // top 
     };
 
     //Buffer object
@@ -150,8 +152,13 @@ int main () {
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    //position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    //color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
+
 
     //for triangle
     glBindVertexArray(VAOs[1]);
@@ -176,12 +183,12 @@ int main () {
         glClear(GL_COLOR_BUFFER_BIT);
 
         //Draw two triangles, forming rectangle
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Get wireframe
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Get wireframe
         glUseProgram(shaderProgram);
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //draw separate triangle
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //turn off wireframe
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //turn off wireframe
         glUseProgram(shaderProgram2);
         //uniform color implementation
         float timeValue = glfwGetTime();
