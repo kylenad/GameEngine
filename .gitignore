@@ -1,0 +1,21 @@
+# Ignore build artifacts and directories
+/build/
+/*.exe
+/*.dll
+/*.o
+/*.obj
+/*.pdb
+/*.lib
+/*.so
+/*.a
+
+# CMake-generated files
+CMakeCache.txt
+CMakeFiles/
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Dependency libraries (if downloaded locally)
+libs/

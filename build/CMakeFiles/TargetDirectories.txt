@@ -1,3 +1,0 @@
-/Users/kylen/Desktop/Programs/GameEngine/build/CMakeFiles/MyExecutable.dir
-/Users/kylen/Desktop/Programs/GameEngine/build/CMakeFiles/edit_cache.dir
-/Users/kylen/Desktop/Programs/GameEngine/build/CMakeFiles/rebuild_cache.dir
