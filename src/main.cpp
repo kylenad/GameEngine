@@ -25,8 +25,9 @@ const char *fragmentShaderSource = "#version 410 core\n"
     "}\0";
 const char *fragmentShaderSource2 = "#version 410 core\n"
     "out vec4 FragColor;\n"
+    "uniform vec4 ourColor;\n"
     "void main() {\n"
-    "FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n" //yellow
+    "FragColor = ourColor;\n" //yellow
     "}\0";
 
 
@@ -164,8 +165,6 @@ int main () {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    //Get wireframe
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //Main loop
     while (!glfwWindowShouldClose(window)) {
@@ -177,13 +176,22 @@ int main () {
         glClear(GL_COLOR_BUFFER_BIT);
 
         //Draw two triangles, forming rectangle
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Get wireframe
         glUseProgram(shaderProgram);
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //draw separate triangle
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //turn off wireframe
         glUseProgram(shaderProgram2);
+        //uniform color implementation
+        float timeValue = glfwGetTime();
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(shaderProgram2, "ourColor");
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        //render triangle itself
         glBindVertexArray(VAOs[1]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
     // Swap buffers
         glfwSwapBuffers(window);
 
