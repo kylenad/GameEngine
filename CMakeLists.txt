@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(GameEngine)
 set(CMAKE_CXX_STANDARD 17)
-add_executable(MyExecutable src/main.cpp src/glad.c)
+add_executable(MyExecutable src/main.cpp src/glad.c src/shader.cpp)
 
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
@@ -31,3 +31,5 @@ endif()
 target_include_directories(MyExecutable PRIVATE include)
 
 target_link_libraries(MyExecutable OpenGL::GL glfw)
+
+target_compile_definitions(MyExecutable PRIVATE ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets")

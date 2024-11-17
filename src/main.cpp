@@ -1,6 +1,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <shaders/shader.h>
 
 //Function definitions
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -122,6 +123,9 @@ int main () {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    //For using custom shader library
+    Shader ourShader(ASSETS_DIR "/shaders/3.3.shader.vs", ASSETS_DIR "/shaders/3.3.shader.fs");
+
     float verticies[] = {
         // position          //color
          0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // top right
@@ -184,7 +188,7 @@ int main () {
 
         //Draw two triangles, forming rectangle
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Get wireframe
-        glUseProgram(shaderProgram);
+        ourShader.use();
         glBindVertexArray(VAOs[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //draw separate triangle
