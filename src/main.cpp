@@ -7,32 +7,6 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
-//Basic vertex shader definition using version 4.1
-const char *vertexShaderSource = "#version 410 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "layout (location = 1) in vec3 aColor;\n"
-    "out vec3 rectColor;\n"
-    "void main()\n"
-    "{\n"
-    "gl_Position = vec4(aPos, 1.0);\n" 
-    "rectColor = aColor;\n"
-    "}\0";
-
-//Fragment shader definition
-const char *fragmentShaderSource = "#version 410 core\n"
-    "out vec4 FragColor;\n"
-    "in vec3 rectColor;\n"
-    "void main() {\n"
-    "FragColor = vec4(rectColor, 1.0);\n"
-    "}\0";
-const char *fragmentShaderSource2 = "#version 410 core\n"
-    "out vec4 FragColor;\n"
-    "uniform vec4 ourColor;\n"
-    "void main() {\n"
-    "FragColor = ourColor;\n" //yellow
-    "}\0";
-
-
 int main () {
 
     //Intitalize GLFW
@@ -70,61 +44,9 @@ int main () {
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 
-
-    //Setting up shaders for use
-
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-
-    //Process of setting up fragment shader
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    unsigned int fragmentShader2;
-    fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader2, 1, &fragmentShaderSource2, NULL);
-    glCompileShader(fragmentShader2);
-
-
-
-
-    //Make shader program object
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    //Attach and link shaders
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    //Check if link without errors
-    int  success;
-    char infoLog[512];
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(!success) {
-    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    unsigned int shaderProgram2 = glCreateProgram();
-    glAttachShader(shaderProgram2, vertexShader);
-    glAttachShader(shaderProgram2, fragmentShader2);
-    glLinkProgram(shaderProgram2);
-
-    //Delete shader objects onced linked
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader); 
-    glDeleteShader(fragmentShader2);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
     //For using custom shader library
     Shader ourShader(ASSETS_DIR "/shaders/3.3.shader.vs", ASSETS_DIR "/shaders/3.3.shader.fs");
+    Shader anotherShader(ASSETS_DIR "/shaders/3.3.shader.vs", ASSETS_DIR "/shaders/3.3.shader2.fs");
 
     float verticies[] = {
         // position          //color
@@ -193,12 +115,11 @@ int main () {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //draw separate triangle
         //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //turn off wireframe
-        glUseProgram(shaderProgram2);
+        anotherShader.use();
         //uniform color implementation
         float timeValue = glfwGetTime();
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-        int vertexColorLocation = glGetUniformLocation(shaderProgram2, "ourColor");
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        anotherShader.setVec4("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
         //render triangle itself
         glBindVertexArray(VAOs[1]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -214,8 +135,6 @@ int main () {
     glDeleteVertexArrays(2, VAOs);
     glDeleteBuffers(2, VBOs);
     glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
-    glDeleteProgram(shaderProgram2);
 
     glfwTerminate();
 
