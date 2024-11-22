@@ -8,6 +8,9 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
+//variables
+float mixValue = 0.2f;
+
 int main () {
 
     //Intitalize GLFW
@@ -79,10 +82,10 @@ int main () {
 
     float rectTexture[] = {
     // positions          // colors           // texture coords
-     0.8f,  0.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-     0.8f, -0.8f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+     0.8f,  0.0f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
+     0.8f, -0.8f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
      0.0f, -0.8f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-     0.0f,  0.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+     0.0f,  0.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f    // top left 
     };
     unsigned int indicesTexture[] = {  
         0, 1, 3, // first triangle
@@ -162,11 +165,11 @@ int main () {
     //Gen second texture
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    data = stbi_load(ASSETS_DIR "/textures/gus_copy.png", &width, &height, &nrChannels, 0);
+    data = stbi_load(ASSETS_DIR "/textures/awesomeface.png", &width, &height, &nrChannels, 0);
     if(data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -212,6 +215,7 @@ int main () {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
         textShader.use();
+        textShader.setFloat("mixValue", mixValue);
         glBindVertexArray(VAOs[2]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -240,4 +244,18 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 void processInput(GLFWwindow *window) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        mixValue += 0.002f;
+        if (mixValue >= 1.0f) {
+            mixValue = 1.0f;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        mixValue -= 0.002f;
+        if (mixValue <= 0.0f) {
+            mixValue = 0.0f;
+        }
+    }
 }
