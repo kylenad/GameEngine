@@ -12,6 +12,7 @@ elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
     set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build for x64 architecture on Intel Macs" FORCE)
 endif()
 
+# Allow to build from IDE without cmake build in terminal being out of date
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the build type (Debug or Release)" FORCE)
 endif()
