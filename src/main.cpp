@@ -1,8 +1,13 @@
+// Libraries---------------------------------------------------------
 #include <iostream>
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <shaders/shader.h>
 #include <stb_image/stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <Window.h>
+// ------------------------------------------------------------------
 
 //Function definitions
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -13,42 +18,17 @@ float mixValue = 0.2f;
 
 int main () {
 
-    //Intitalize GLFW
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << '\n';
-        return -1;
-    }
+    //Create window
+    Window window(800, 600, "Game Engine: Demo Window");
+    GLFWwindow* glfwWindow = window.getGLFWwindow();
 
-    //Use OpenGL Version 4.1 (Highest version usable on MacOS)
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    //Create test window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Hello Window!", NULL, NULL);
-    if(!window) {
-        std::cerr << "Failed to create window" << '\n';
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-    
     //Intitalize Glad
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     std::cerr << "Failed to initialize GLAD" << '\n';
     return -1;
     }
 
-    //Simple Check
-    std::cout << "Hello World!";
-    std::cout << '\n' << "CMake Compilation" << '\n';
-
-    //glViewport(0, 0, 800, 600);
-
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
-
-    //For using custom shader library
+    // Custom shader library
     Shader ourShader(ASSETS_DIR "/shaders/3.3.shader.vs", ASSETS_DIR "/shaders/3.3.shader.fs");
     Shader anotherShader(ASSETS_DIR "/shaders/3.3.shader.vs", ASSETS_DIR "/shaders/3.3.shader2.fs");
     Shader textShader(ASSETS_DIR "/shaders/text.shader.vs", ASSETS_DIR "/shaders/text.shader.fs");
@@ -185,9 +165,9 @@ int main () {
     textShader.setInt("texture2", 1);
 
     //Main loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(glfwWindow)) {
     //Input
-        processInput(window);
+        processInput(glfwWindow);
 
     // Render here
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -214,14 +194,20 @@ int main () {
         glBindTexture(GL_TEXTURE_2D, texture); //bind texture
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
+        // Make transformations with glm
+        glm::mat4  trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.2f, -0.4f, 1.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 0.1f));
         textShader.use();
         textShader.setFloat("mixValue", mixValue);
+        unsigned int transformLoc = glGetUniformLocation(textShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
         glBindVertexArray(VAOs[2]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
     // Swap buffers
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(glfwWindow);
 
     // Poll for and process events
         glfwPollEvents();
@@ -236,10 +222,6 @@ int main () {
 
     return 0;
 }
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
-}  
 
 void processInput(GLFWwindow *window) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
