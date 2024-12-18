@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(GameEngine)
 set(CMAKE_CXX_STANDARD 17)
-add_executable(MyExecutable src/main.cpp src/glad.c src/shader.cpp src/stb_image.cpp src/Window.cpp src/Geometry.cpp)
+add_executable(MyExecutable src/main.cpp src/glad.c src/shader.cpp src/stb_image.cpp src/Window.cpp src/Geometry.cpp src/Texture.cpp)
 
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")

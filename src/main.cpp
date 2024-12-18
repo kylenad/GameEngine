@@ -1,13 +1,13 @@
 // Libraries---------------------------------------------------------
 #include <iostream>
 #include <shaders/shader.h>
-#include <stb_image/stb_image.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Window.h>
 #include <Geometry.h>
+#include <Texture.h>
 // ------------------------------------------------------------------
 
 //Function definitions
@@ -76,72 +76,17 @@ int main () {
     // Gen VAOs for shapes to be rendered
     unsigned int RectVBO, RectEBO;
     unsigned int TriVBO;
-    unsigned int RectVAO, TriVAO;
-    RectVAO = Geometry::createRectangle(verticies, sizeof(verticies), indices, sizeof(indices), RectVBO, RectEBO);
+    unsigned int RectVAO, TriVAO, Rect2VAO;
+    bool hasTextCords;
+    RectVAO = Geometry::createRectangle(verticies, sizeof(verticies), indices, sizeof(indices), RectVBO, RectEBO, hasTextCords = false);
     TriVAO = Geometry::createTriangle(triangle, sizeof(triangle), TriVBO);
+    Rect2VAO = Geometry::createRectangle(rectTexture, sizeof(rectTexture), indices, sizeof(indices), RectVBO, RectEBO, hasTextCords = true);
 
-    unsigned int VBOs[3], VAOs[3], EBOs[2];
-    glGenVertexArrays(3, VAOs);
-    glGenBuffers(2, EBOs);
-    glGenBuffers(3, VBOs);
-
-    glBindVertexArray(VAOs[2]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[2]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(rectTexture), rectTexture, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesTexture), indicesTexture, GL_STATIC_DRAW);
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    //Setting up textures
-    //Standard setup for any texture
-    unsigned int texture, texture2;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //Textures
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char *data = stbi_load(ASSETS_DIR "/textures/wall.jpg", &width, &height, &nrChannels, 0);
-    if(data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    //Free image memory after generating texture and mipmaps
-    stbi_image_free(data);
-
-    //Gen second texture
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    data = stbi_load(ASSETS_DIR "/textures/awesomeface.png", &width, &height, &nrChannels, 0);
-    if(data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else {
-        std::cout << "Failed to load texture2" << std::endl;
-    }
-    stbi_image_free(data);
+    unsigned int texture1, texture2;
+    texture1 = Texture::setTexture(ASSETS_DIR "/textures/wall.jpg", width, height, nrChannels, true);
+    texture2 = Texture::setTexture(ASSETS_DIR "/textures/awesomeface.png", width, height, nrChannels, true);
 
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     textShader.use();
@@ -175,7 +120,7 @@ int main () {
         glDrawArrays(GL_TRIANGLES, 0, 3);
         //Draw a second rectangle with texture
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture); //bind texture
+        glBindTexture(GL_TEXTURE_2D, texture1); //bind texture
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
         // Make transformations with glm
@@ -186,7 +131,7 @@ int main () {
         textShader.setFloat("mixValue", mixValue);
         unsigned int transformLoc = glGetUniformLocation(textShader.ID, "transform");
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-        glBindVertexArray(VAOs[2]);
+        glBindVertexArray(Rect2VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
@@ -197,14 +142,10 @@ int main () {
         glfwPollEvents();
     }
 
-/*
     //De-allocate resources
-    glDeleteVertexArrays(2, VAOs);
-    glDeleteBuffers(2, VBOs);
-    glDeleteBuffers(2, EBOs);
+    unsigned int VAOs[] = {RectVAO, TriVAO, Rect2VAO};
+    glDeleteVertexArrays(3, VAOs);
 
-    glfwTerminate();
-*/
     return 0;
 }
 

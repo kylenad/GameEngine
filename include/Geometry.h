@@ -6,7 +6,7 @@
 class Geometry {
     public:
         static unsigned int createRectangle(float* verticies, unsigned int vertSize, unsigned int* indices, unsigned int indSize, unsigned int& VBO, 
-            unsigned int& EBO);
+            unsigned int& EBO, bool hasTextCords);
         static unsigned int createTriangle(float* verticies, unsigned int vertSize, unsigned int& VBO);
 };
 #endif // GEOMETRY_H

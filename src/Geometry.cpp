@@ -4,7 +4,7 @@
 
 
 unsigned int Geometry::createRectangle(float* verticies, unsigned int vertSize, unsigned int* indices, unsigned int indSize, unsigned int& VBO, 
-            unsigned int& EBO) {
+            unsigned int& EBO, bool hasTextCords) {
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -17,11 +17,16 @@ unsigned int Geometry::createRectangle(float* verticies, unsigned int vertSize, 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indSize, indices, GL_STATIC_DRAW);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (hasTextCords ? 8 : 6) * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),  (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (hasTextCords ? 8 : 6) * sizeof(float),  (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    //Texture attribute
+    if(hasTextCords) {
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+    }
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
