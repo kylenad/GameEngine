@@ -1,16 +1,17 @@
 // Libraries---------------------------------------------------------
 #include <iostream>
-#include <glad/glad.h>
 #include <shaders/shader.h>
 #include <stb_image/stb_image.h>
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Window.h>
+#include <Geometry.h>
 // ------------------------------------------------------------------
 
 //Function definitions
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 //variables
@@ -72,34 +73,18 @@ int main () {
         1, 2, 3  // second triangle
     };
 
-    //Buffer object
+    // Gen VAOs for shapes to be rendered
+    unsigned int RectVBO, RectEBO;
+    unsigned int TriVBO;
+    unsigned int RectVAO, TriVAO;
+    RectVAO = Geometry::createRectangle(verticies, sizeof(verticies), indices, sizeof(indices), RectVBO, RectEBO);
+    TriVAO = Geometry::createTriangle(triangle, sizeof(triangle), TriVBO);
+
     unsigned int VBOs[3], VAOs[3], EBOs[2];
     glGenVertexArrays(3, VAOs);
     glGenBuffers(2, EBOs);
     glGenBuffers(3, VBOs);
 
-    //for rectangle
-    glBindVertexArray(VAOs[0]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[0]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    //position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    //color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-
-    //for triangle
-    glBindVertexArray(VAOs[1]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    //for rectangle with texture
     glBindVertexArray(VAOs[2]);
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[2]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(rectTexture), rectTexture, GL_STATIC_DRAW);
@@ -118,7 +103,6 @@ int main () {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
 
     //Setting up textures
     //Standard setup for any texture
@@ -176,7 +160,7 @@ int main () {
         //Draw two triangles, forming rectangle
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Get wireframe
         ourShader.use();
-        glBindVertexArray(VAOs[0]);
+        glBindVertexArray(RectVAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //draw separate triangle
         //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //turn off wireframe
@@ -187,7 +171,7 @@ int main () {
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
         anotherShader.setVec4("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
         //render triangle itself
-        glBindVertexArray(VAOs[1]);
+        glBindVertexArray(TriVAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         //Draw a second rectangle with texture
         glActiveTexture(GL_TEXTURE0);
@@ -213,13 +197,14 @@ int main () {
         glfwPollEvents();
     }
 
+/*
     //De-allocate resources
     glDeleteVertexArrays(2, VAOs);
     glDeleteBuffers(2, VBOs);
     glDeleteBuffers(2, EBOs);
 
     glfwTerminate();
-
+*/
     return 0;
 }
 
