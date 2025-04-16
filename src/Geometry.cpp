@@ -28,8 +28,13 @@ unsigned int Geometry::createRectangle(float* verticies, unsigned int vertSize, 
         glEnableVertexAttribArray(2);
     }
     
+    // Un-bind VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    // Cleanup buffers
+    //glDeleteBuffers(1, &VBO);
+    //glDeleteBuffers(1, &EBO);
 
     return VAO;
 }
@@ -49,6 +54,9 @@ unsigned int Geometry::createTriangle(float* verticies, unsigned int vertSize, u
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    // Cleanup buffers
+    glDeleteBuffers(1, &VBO);
 
     return VAO;
 }
